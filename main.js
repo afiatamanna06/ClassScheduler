@@ -222,3 +222,90 @@ function CSP(domain) {
         }
     }
 }
+
+function selectLecture(domain) {
+    var ind = 0;
+    const length = domain.length;
+    var choosingCourse;
+    var checkDomain = [];
+    while (domain.length != 0) {
+        console.log(domain.length);
+        choosingCourse = domain[ind];
+        checkDomain.push(domain[ind]);
+        domain.splice(ind, 1);
+        for (teacherInd in teacher_timetable) {
+            if (teacher_timetable[teacherInd].Teacher == choosingCourse.teacher[0]) {
+                for (days in days_in_weeks) {
+                    for (var i = 0; i < 5; i++) {
+                        if (teacher_timetable[teacherInd][days_in_weeks[days]][i] == 1) {
+                            noFlag = false;;
+                            if (!choosingCourse.isLabCourse) {
+                                for (var j = 0; j < i; j++) {
+                                    if (choosingCourse.courseName == year_timetable[choosingCourse.year - 1][days_in_weeks[days]][j]) {
+                                        noFlag = true;
+                                    }
+                                }
+                                if (year_timetable[choosingCourse.year - 1][days_in_weeks[days]][i] == 0 && !noFlag) {
+                                    teacher_timetable[teacherInd][days_in_weeks[days]][i] = choosingCourse.courseName;
+                                    year_timetable[choosingCourse.year - 1][days_in_weeks[days]][i] = choosingCourse.courseName;
+                                    var chosenDay = days_in_weeks[days];
+                                    var period = i;
+                                    var year = choosingCourse.year;
+
+                                    checkDomain.pop();
+                                    domain.push.apply(domain, checkDomain);
+                                    return {
+                                        choosingCourse,
+                                        teacherInd,
+                                        year,
+                                        chosenDay,
+                                        period
+                                    };
+                                }
+                            } else {
+                                var multiTeacherIndex = [];
+                                multipleTeacherFlag = false;
+                                for (var j = 0; j < choosingCourse.teacher.length; j++) {
+                                    for (k = 0; k < teacher_timetable.length; k++) {
+                                        if (teacher_timetable[k].Teacher == choosingCourse.teacher[j]) {
+
+                                            multiTeacherIndex.push(k);
+                                            if (teacher_timetable[k][days_in_weeks[days]][i] != 1 || teacher_timetable[k][days_in_weeks[days]][i + 1] != 1) {
+                                                multipleTeacherFlag = true;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (i != 2 && i != 4 && year_timetable[choosingCourse.year - 1][days_in_weeks[days]][i] == 0 && year_timetable[choosingCourse.year - 1][days_in_weeks[days]][i + 1] == 0 && !multipleTeacherFlag) {
+                                    // here dex is an index of teacher timeTable
+
+                                    for (var dex in multiTeacherIndex) {
+                                        teacher_timetable[dex][days_in_weeks[days]][i] = choosingCourse.courseName;
+                                        teacher_timetable[dex][days_in_weeks[days]][i + 1] = choosingCourse.courseName;
+                                    }
+
+                                    year_timetable[choosingCourse.year - 1][days_in_weeks[days]][i] = choosingCourse.courseName;
+                                    year_timetable[choosingCourse.year - 1][days_in_weeks[days]][i + 1] = choosingCourse.courseName;
+                                    var chosenDay = days_in_weeks[days];
+                                    var period = i;
+                                    var year = choosingCourse.year;
+                                    checkDomain.pop();
+                                    domain.push.apply(domain, checkDomain);
+                                    return {
+                                        choosingCourse,
+                                        multiTeacherIndex,
+                                        year,
+                                        chosenDay,
+                                        period
+                                    };
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    domain.push.apply(domain, checkDomain);
+    return null;
+}
