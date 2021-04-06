@@ -116,3 +116,47 @@ function teacherPeriodPlotter(teachersName, days, startTime, endTime) {
         }
     }
 }
+
+var courses = reader.utils.sheet_to_json(file.Sheets[file.SheetNames[1]]);
+
+for (var i in courses) {
+    for (var key in courses[i]) {
+        if (courses[i].hasOwnProperty(key)) {
+            // console.log(key);
+            var val = courses[i][key];
+            // console.log(courses[i]["Teacher Initial"]);
+            if (key != "Teacher Initial") {
+                lectureMaker(val, courses[i]["Teacher Initial"]);
+                // console.log(val);
+            }
+        }
+    }
+}
+
+function lectureMaker(input, teacher) {
+    for (var i in lecture) {
+        if (lecture[i].courseName == input) {
+            lecture[i].teacher.push(teacher);
+            return;
+        }
+    }
+    var courseStr = { courseName: "", year: "", teacher: [], isLabCourse: false, section: 0 };
+    courseStr.courseName = input;
+    courseStr.teacher.push(teacher);
+
+    var splittedStr = input.split(" ");
+    courseStr.year = parseInt(splittedStr[1][0]);
+    if (splittedStr[1][2] == "1") courseStr.isLabCourse = true;
+    if (splittedStr.length > 2) {
+        courseStr.section = parseInt(splittedStr[3]);
+    }
+
+
+    if (!courseStr.isLabCourse) {
+        lecture.push(courseStr);
+        lecture.push(courseStr);
+    } else {
+        lecture.push(courseStr);
+    }
+
+}
