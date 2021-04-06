@@ -93,3 +93,26 @@ function initialize() {
 
     }
 }
+
+initialize();
+
+function teacherPeriodPlotter(teachersName, days, startTime, endTime) {
+    startTime = startTime.replace("am", " am");
+    startTime = startTime.replace("pm", " pm");
+    endTime = endTime.replace("am", " am");
+    endTime = endTime.replace("pm", " pm");
+    var s_time = dayjs("12-25-1995 " + startTime, "MM-DD-YYYY h:mm a");
+    var e_time = dayjs("12-25-1995 " + endTime, "MM-DD-YYYY h:mm a");
+    for (var i = 0; i < periodDayjsTime.length - 1; i++) {
+        if ((periodDayjsTime[i].isAfter(s_time) || periodDayjsTime[i].isSame(s_time)) && (periodDayjsTime[i + 1].isBefore(e_time) || periodDayjsTime[i + 1].isSame(e_time))) {
+
+            for (j in teacher_timetable) {
+                if (teacher_timetable[j].Teacher == teachersName) {
+
+                    if (i <= 2) teacher_timetable[j][days][i] = 1;
+                    else if (i > 3) teacher_timetable[j][days][i - 1] = 1;
+                }
+            }
+        }
+    }
+}
