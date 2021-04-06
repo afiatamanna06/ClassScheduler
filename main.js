@@ -160,3 +160,65 @@ function lectureMaker(input, teacher) {
     }
 
 }
+
+CSP(lecture)
+
+function CSP(domain) {
+    const totalNumberofLectures = domain.length;
+    var ind = 0;
+    var chosenLecture;
+    while (domain.length != 0) {
+        chosenLecture = selectLecture(domain);
+        if (chosenLecture == null) {
+            ind = ind - 1;
+            if (ind < 0) {
+                console.log("No Solution");
+                return;
+            }
+
+            TLE = TLE + 1;
+
+            console.log("----------------index of Lecture-----------");
+            console.log(ind);
+            console.log("unassign e dhukse");
+            console.log("----------------DOmain Length---------------------");
+            console.log(domain.length);
+
+            var falseCourse = solutionDomain.pop();
+
+            unsuccessfulCourses.push(falseCourse.choosingCourse);
+
+            console.log("----------------False Course---------------------");
+            console.log(falseCourse);
+
+            var batch = falseCourse.year;
+            var day = falseCourse.chosenDay;
+            var index = falseCourse.period;
+            if (!falseCourse.choosingCourse.isLabCourse) {
+                var teacherIndex = falseCourse.teacherInd;
+
+                teacher_timetable[teacherIndex][day][index] = 1;
+                year_timetable[batch - 1][day][index] = 0;
+            } else {
+                var teacherIndex = falseCourse.multiTeacherIndex;
+                for (var t_index in teacherIndex) {
+                    teacher_timetable[teacherIndex[t_index]][day][index + 1] = 1;
+                    teacher_timetable[teacherIndex[t_index]][day][index] = 1;
+                }
+                year_timetable[batch - 1][day][index + 1] = 0;
+                year_timetable[batch - 1][day][index] = 0;
+
+            }
+
+        } else {
+
+            console.log("--------------eta Choose hoise---------");
+            console.log(ind);
+            console.log(chosenLecture);
+            solutionDomain.push(chosenLecture);
+            ind = ind + 1;
+            var len = solutionDomain.length;
+            console.log(ind);
+        }
+    }
+}
