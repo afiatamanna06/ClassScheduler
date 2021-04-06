@@ -309,3 +309,14 @@ function selectLecture(domain) {
     domain.push.apply(domain, checkDomain);
     return null;
 }
+
+function assignTeacher(courseName, teacherIndex, day, period) {
+    teacher_timetable[teacherIndex][day][period] = courseName;
+}
+
+function assignBatchPeriod(courseName, year, day, period) {
+    year_timetable[year][day][period] = courseName;
+}
+
+console.log(teacher_timetable);
+console.log(year_timetable);
