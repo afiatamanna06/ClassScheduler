@@ -1,5 +1,5 @@
 const reader = require('xlsx');
-const file = reader.readFile('./input_multi_course_impossible_2.xlsx');
+const file = reader.readFile('input.xlsx');
 const dayjs = require('dayjs');
 const http = require('http');
 
@@ -122,12 +122,12 @@ var courses = reader.utils.sheet_to_json(file.Sheets[file.SheetNames[1]]);
 for (var i in courses) {
     for (var key in courses[i]) {
         if (courses[i].hasOwnProperty(key)) {
-            // console.log(key);
+
             var val = courses[i][key];
-            // console.log(courses[i]["Teacher Initial"]);
+
             if (key != "Teacher Initial") {
                 lectureMaker(val, courses[i]["Teacher Initial"]);
-                // console.log(val);
+
             }
         }
     }
@@ -178,10 +178,10 @@ function CSP(domain) {
 
             TLE = TLE + 1;
 
-            console.log("----------------index of Lecture-----------");
+            console.log("----------------Index of Lecture-----------");
             console.log(ind);
-            console.log("unassign e dhukse");
-            console.log("----------------DOmain Length---------------------");
+            console.log("Entering to unassign");
+            console.log("----------------Domain Length---------------------");
             console.log(domain.length);
 
             var falseCourse = solutionDomain.pop();
@@ -212,7 +212,7 @@ function CSP(domain) {
 
         } else {
 
-            console.log("--------------eta Choose hoise---------");
+            console.log("--------------Selected--------------");
             console.log(ind);
             console.log(chosenLecture);
             solutionDomain.push(chosenLecture);
